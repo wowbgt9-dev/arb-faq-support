@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARB FAQ Support</title>
+</head>
+<body>
+  <h1>ARB FAQ & Support Guide</h1>
+  <p>ARB FAQ Support is running.</p>
+  <p id="status">Checking connection...</p>
+
+  <script>
+    fetch("/api/health")
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("status").textContent =
+          data.database === "connected"
+            ? "Database connected"
+            : "Database disconnected";
+      })
+      .catch(() => {
+        document.getElementById("status").textContent =
+          "Connection failed";
+      });
+  </script>
+</body>
+</html>
