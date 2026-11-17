@@ -2,28 +2,588 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ARB FAQ Support</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARB FAQ & Support</title>
+<style>
+:root {
+  --bg:#080e1b;--panel:#111b2d;--panel2:#18253b;
+  --border:#293a55;--text:#edf3ff;--muted:#91a2bc;
+  --blue:#559cff;--green:#43d6a0;--red:#ff6c78;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Inter,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+header{height:76px;border-bottom:1px solid var(--border);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 5%;position:sticky;top:0;background:#0a1221;z-index:5}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;
+background:linear-gradient(135deg,#398bff,#735cff);
+display:grid;place-items:center;font-size:20px;font-weight:900}
+.brand h1{font-size:16px;margin:0}
+.brand small{color:var(--muted)}
+.status{font-size:12px;color:var(--green)}
+main{max-width:1120px;margin:auto;padding:38px 22px 70px}
+.hero{margin-bottom:25px}
+.eyebrow{color:var(--blue);font-size:11px;
+letter-spacing:2px;font-weight:bold}
+.hero h2{font-size:36px;margin:10px 0}
+.hero p{color:var(--muted);line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);
+gap:12px;margin:25px 0}
+.stat,.panel,.faq-card{background:var(--panel);
+border:1px solid var(--border);border-radius:14px}
+.stat{padding:17px}
+.stat strong{font-size:25px;display:block}
+.stat span{font-size:12px;color:var(--muted)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+input,textarea,select{background:#0b1424;color:var(--text);
+border:1px solid var(--border);border-radius:9px;
+padding:12px;width:100%;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--blue)}
+.search{flex:1;min-width:220px}
+.btn{border:1px solid var(--border);background:var(--panel2);
+color:var(--text);padding:11px 16px;border-radius:9px;
+cursor:pointer;font-size:13px}
+.btn:hover{border-color:var(--blue)}
+.primary{background:#286fd0;border-color:#286fd0}
+.danger{color:#ff8993;border-color:#71343c}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.filter{border:1px solid var(--border);border-radius:30px;
+padding:9px 14px;background:var(--panel);color:var(--muted);
+cursor:pointer;font-size:12px}
+.filter.active{background:#1c3b65;color:white;border-color:var(--blue)}
+.heading{display:flex;justify-content:space-between;
+align-items:center;margin-bottom:14px}
+.heading h3{font-size:17px}
+.heading span{font-size:12px;color:var(--muted)}
+.faq-list{display:grid;gap:12px}
+.faq-card{overflow:hidden}
+.faq-head{padding:19px;display:flex;justify-content:space-between;
+gap:15px;cursor:pointer}
+.category{font-size:10px;font-weight:bold;color:#8fc1ff;
+background:#1b3455;padding:5px 9px;border-radius:5px;
+display:inline-block;margin-bottom:9px}
+.question{font-size:15px;font-weight:650;line-height:1.5}
+.arrow{color:var(--muted)}
+.faq-content{display:none;padding:0 19px 20px}
+.faq-card.open .faq-content{display:block}
+.answer-label{font-size:10px;color:var(--green);
+font-weight:bold;letter-spacing:1px;margin:5px 0 9px}
+.answer{font-size:14px;line-height:1.8;white-space:pre-wrap}
+.detail{background:var(--panel2);padding:15px;
+border-radius:10px;margin-top:14px}
+.detail p{font-size:13px;line-height:1.8;white-space:pre-wrap;color:#bdcce0}
+.content-view{display:grid;gap:12px;margin-top:15px}
+.content-view img{max-width:100%;height:auto;border-radius:9px;
+display:block;border:1px solid var(--border)}
+.content-view img.small{width:35%}
+.content-view img.medium{width:65%}
+.content-view img.large{width:100%}
+.actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.empty{text-align:center;color:var(--muted);padding:35px}
+.modal{position:fixed;inset:0;background:#000b;z-index:10;
+display:none;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--border);
+border-radius:16px;width:min(760px,100%);max-height:92vh;
+overflow:auto;padding:22px}
+.modal-top{display:flex;justify-content:space-between;align-items:center}
+.modal-top h3{margin-top:0}
+.field{margin:15px 0}
+.field label{font-size:12px;color:#b8c9e1;display:block;margin-bottom:7px}
+textarea{resize:vertical;min-height:90px}
+.editor{background:#0b1424;border:1px solid var(--border);
+border-radius:11px;padding:13px;min-height:180px}
+.editor:empty:before{content:attr(data-placeholder);color:#657791}
+.editor:focus{outline:1px solid var(--blue)}
+.editor p{line-height:1.7}
+.editor img{max-width:100%;height:auto;border-radius:8px;display:block;margin:12px 0}
+.editor img.small{width:35%}
+.editor img.medium{width:65%}
+.editor img.large{width:100%}
+.editor-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.editor-tools .btn{padding:8px 11px}
+.editor img.selected{outline:3px solid var(--blue)}
+.hint{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
+.preview{border:1px dashed var(--border);border-radius:10px;
+padding:12px;margin-top:12px}
+.preview img{max-width:100%;height:auto;border-radius:8px}
+.modal-footer{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+background:#20334d;border:1px solid #45668f;padding:12px 18px;
+border-radius:10px;display:none;z-index:20;font-size:13px}
+footer{text-align:center;border-top:1px solid var(--border);
+padding:23px;color:#71829d;font-size:11px}
+@media(max-width:600px){
+ header{padding:0 15px}.brand h1{font-size:13px}
+ main{padding:28px 14px}.hero h2{font-size:29px}
+ .stats{gap:7px}.stat{padding:12px 9px}
+ .stat strong{font-size:21px}.stat span{font-size:10px}
+ .modal-box{padding:16px}.faq-head{padding:15px}
+}
+</style>
 </head>
 <body>
-  <h1>ARB FAQ & Support Guide</h1>
-  <p>ARB FAQ Support is running.</p>
-  <p id="status">Checking connection...</p>
 
-  <script>
-    fetch("/api/health")
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("status").textContent =
-          data.database === "connected"
-            ? "Database connected"
-            : "Database disconnected";
-      })
-      .catch(() => {
-        document.getElementById("status").textContent =
-          "Connection failed";
-      });
-  </script>
+<header>
+ <div class="brand">
+  <div class="logo">A</div>
+  <div>
+   <h1>ARB FAQ & Support</h1>
+   <small>Live Chat Agent Knowledge Base</small>
+  </div>
+ </div>
+ <div class="status" id="connection">● Connecting...</div>
+</header>
+
+<main>
+ <section class="hero">
+  <div class="eyebrow">SUPPORT KNOWLEDGE CENTER</div>
+  <h2>How can we help you?</h2>
+  <p>Manage support knowledge, procedures and visual guides for ARB Wallet Live Chat agents.</p>
+ </section>
+
+ <section class="stats">
+  <div class="stat"><strong id="totalFaq">0</strong><span>Total FAQ Articles</span></div>
+  <div class="stat"><strong id="totalCategories">0</strong><span>Categories</span></div>
+  <div class="stat"><strong>24/7</strong><span>Knowledge Access</span></div>
+ </section>
+
+ <div class="toolbar">
+  <input class="search" id="search" placeholder="Search FAQ, questions or keywords...">
+  <button class="btn primary" id="addBtn">＋ Add New FAQ</button>
+ </div>
+
+ <div class="filters" id="filters"></div>
+
+ <div class="heading">
+  <h3>FAQ Articles</h3>
+  <span id="resultCount">Loading...</span>
+ </div>
+
+ <div class="faq-list" id="faqList">
+  <div class="empty">Loading FAQ...</div>
+ </div>
+</main>
+
+<footer>ARB FAQ & Support · Internal Knowledge Base</footer>
+
+<div class="modal" id="modal">
+ <div class="modal-box">
+  <div class="modal-top">
+   <h3 id="modalTitle">Add FAQ</h3>
+   <button class="btn" id="closeBtn">✕</button>
+  </div>
+
+  <form id="faqForm">
+   <div class="field">
+    <label>Category</label>
+    <select id="category" required>
+     <option value="">Select category</option>
+     <option>DEPOSIT</option>
+     <option>WITHDRAWAL</option>
+     <option>SCAM</option>
+     <option>ACCOUNT STATUS</option>
+     <option>FROZEN ARB</option>
+     <option>OTHER</option>
+    </select>
+   </div>
+
+   <div class="field">
+    <label>Question</label>
+    <input id="question" required placeholder="Enter FAQ question">
+   </div>
+
+   <div class="field">
+    <label>Recommended Response</label>
+    <textarea id="answer" required placeholder="Enter recommended response"></textarea>
+   </div>
+
+   <div class="field">
+    <label>Agent Guidelines / Additional Details</label>
+    <textarea id="details" placeholder="Enter additional guidelines"></textarea>
+   </div>
+
+   <div class="field">
+    <label>Visual Content Editor</label>
+    <div class="editor-tools">
+     <button type="button" class="btn" id="imageBtn">＋ Add Photo</button>
+     <button type="button" class="btn" id="smallBtn">Small</button>
+     <button type="button" class="btn" id="mediumBtn">Medium</button>
+     <button type="button" class="btn" id="largeBtn">Full width</button>
+     <button type="button" class="btn danger" id="removeImageBtn">Remove selected</button>
+    </div>
+    <div class="editor" id="editor" contenteditable="true"
+     data-placeholder="Write instructions here. Add photos anywhere in the content."></div>
+    <input type="file" id="imageInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+    <div class="hint">
+     Paste or drag photos into the editor. Select an image to resize it.
+     Images are stored in D1 as Base64. Keep images compressed and small.
+     Maximum FAQ content size is approximately 1.8 MB.
+    </div>
+    <div class="preview">
+     <strong style="font-size:12px">Content Preview</strong>
+     <div id="preview" class="content-view"></div>
+    </div>
+   </div>
+
+   <div class="modal-footer">
+    <button type="button" class="btn" id="cancelBtn">Cancel</button>
+    <button type="submit" class="btn primary" id="saveBtn">Save FAQ</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API="/api/faqs";
+let faqs=[];
+let activeCategory="ALL";
+let editingId=null;
+let selectedImage=null;
+
+const $=id=>document.getElementById(id);
+const editor=$("editor");
+
+function esc(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ }[c]));
+}
+
+function toast(message){
+ $("toast").textContent=message;
+ $("toast").style.display="block";
+ setTimeout(()=>$("toast").style.display="none",3000);
+}
+
+async function api(url,options={}){
+ const response=await fetch(url,{
+  ...options,
+  headers:{"Content-Type":"application/json",...(options.headers||{})}
+ });
+ const data=await response.json();
+ if(!response.ok||!data.success)throw new Error(data.error||"Request failed");
+ return data;
+}
+
+async function loadFaqs(){
+ try{
+  const data=await api(API);
+  faqs=data.data||[];
+  $("connection").textContent="● Connected";
+  $("connection").style.color="var(--green)";
+  $("totalFaq").textContent=faqs.length;
+  buildFilters();
+  render();
+ }catch(e){
+  $("connection").textContent="● Connection error";
+  $("connection").style.color="var(--red)";
+  $("faqList").innerHTML='<div class="empty">Unable to load FAQ: '+esc(e.message)+'</div>';
+ }
+}
+
+function buildFilters(){
+ const categories=[...new Set(faqs.map(f=>f.category))];
+ $("totalCategories").textContent=categories.length;
+ $("filters").innerHTML="";
+ ["ALL",...categories].forEach(c=>{
+  const b=document.createElement("button");
+  b.className="filter"+(c===activeCategory?" active":"");
+  b.textContent=c==="ALL"?"All Topics":c;
+  b.onclick=()=>{activeCategory=c;buildFilters();render()};
+  $("filters").appendChild(b);
+ });
+}
+
+function render(){
+ const term=$("search").value.toLowerCase().trim();
+ const list=faqs.filter(f=>{
+  const matchCategory=activeCategory==="ALL"||f.category===activeCategory;
+  const text=[f.category,f.question,f.answer,f.details,f.content_json].join(" ").toLowerCase();
+  return matchCategory&&text.includes(term)&&Number(f.is_published)===1;
+ });
+
+ $("resultCount").textContent=list.length+" articles";
+
+ if(!list.length){
+  $("faqList").innerHTML='<div class="empty">No matching FAQ found.</div>';
+  return;
+ }
+
+ $("faqList").innerHTML=list.map(f=>`
+  <article class="faq-card" data-id="${f.id}">
+   <div class="faq-head">
+    <div>
+     <span class="category">${esc(f.category)}</span>
+     <div class="question">${esc(f.question)}</div>
+    </div>
+    <span class="arrow">⌄</span>
+   </div>
+   <div class="faq-content">
+    <div class="answer-label">RECOMMENDED RESPONSE</div>
+    <div class="answer">${esc(f.answer)}</div>
+    ${f.details?`<div class="detail"><strong>Agent Guidelines</strong><p>${esc(f.details)}</p></div>`:""}
+    <div class="content-view">${renderBlocks(f.content_json)}</div>
+    <div class="actions">
+     <button class="btn edit">Edit FAQ</button>
+     <button class="btn danger delete">Delete FAQ</button>
+    </div>
+   </div>
+  </article>
+ `).join("");
+
+ document.querySelectorAll(".faq-head").forEach(el=>{
+  el.onclick=()=>el.parentElement.classList.toggle("open");
+ });
+ document.querySelectorAll(".edit").forEach(el=>{
+  el.onclick=()=>{
+   const id=Number(el.closest(".faq-card").dataset.id);
+   openEdit(id);
+  };
+ });
+ document.querySelectorAll(".delete").forEach(el=>{
+  el.onclick=()=>{
+   const id=Number(el.closest(".faq-card").dataset.id);
+   deleteFaq(id);
+  };
+ });
+}
+
+function renderBlocks(raw){
+ let blocks=[];
+ try{blocks=JSON.parse(raw||"[]")}catch{}
+ return blocks.map(b=>{
+  if(b.type==="image"){
+   return `<img class="${esc(b.size||"large")}" src="${esc(b.src)}" alt="FAQ guide image">`;
+  }
+  if(b.type==="text"){
+   return `<div>${esc(b.text).replace(/\n/g,"<br>")}</div>`;
+  }
+  return "";
+ }).join("");
+}
+
+function openNew(){
+ editingId=null;
+ $("modalTitle").textContent="Add New FAQ";
+ $("faqForm").reset();
+ editor.innerHTML="";
+ $("preview").innerHTML="";
+ selectedImage=null;
+ $("modal").classList.add("show");
+}
+
+function openEdit(id){
+ const f=faqs.find(x=>Number(x.id)===id);
+ if(!f)return;
+ editingId=id;
+ $("modalTitle").textContent="Edit FAQ";
+ $("category").value=f.category;
+ $("question").value=f.question;
+ $("answer").value=f.answer;
+ $("details").value=f.details||"";
+ editor.innerHTML=renderBlocks(f.content_json);
+ $("preview").innerHTML=editor.innerHTML;
+ selectedImage=null;
+ $("modal").classList.add("show");
+}
+
+function closeModal(){
+ $("modal").classList.remove("show");
+}
+
+function addImage(file){
+ if(!file||!file.type.startsWith("image/"))return;
+ if(file.size>400*1024){
+  toast("Image too large. Please use an image under 400 KB.");
+  return;
+ }
+ const reader=new FileReader();
+ reader.onload=()=>{
+  const img=document.createElement("img");
+  img.src=reader.result;
+  img.className="large";
+  img.alt="FAQ image";
+  img.onclick=()=>selectImage(img);
+  editor.appendChild(img);
+  const p=document.createElement("p");
+  p.innerHTML="<br>";
+  editor.appendChild(p);
+  updatePreview();
+ };
+ reader.readAsDataURL(file);
+}
+
+function selectImage(img){
+ if(selectedImage)selectedImage.classList.remove("selected");
+ selectedImage=img;
+ img.classList.add("selected");
+}
+
+function resizeSelected(size){
+ if(!selectedImage){
+  toast("Select a photo first.");
+  return;
+ }
+ selectedImage.classList.remove("small","medium","large");
+ selectedImage.classList.add(size);
+ updatePreview();
+}
+
+function updatePreview(){
+ $("preview").innerHTML=editor.innerHTML;
+}
+
+function getBlocks(){
+ const blocks=[];
+ function walk(node){
+  if(node.nodeType===Node.TEXT_NODE){
+   if(node.textContent.trim())blocks.push({type:"text",text:node.textContent});
+   return;
+  }
+  if(node.nodeType!==Node.ELEMENT_NODE)return;
+  if(node.tagName==="IMG"){
+   blocks.push({
+    type:"image",
+    src:node.src,
+    size:["small","medium","large"].find(x=>node.classList.contains(x))||"large"
+   });
+   return;
+  }
+  if(node.tagName==="BR"){
+   blocks.push({type:"text",text:"\n"});
+   return;
+  }
+  if(node.tagName==="DIV"||node.tagName==="P"){
+   if(node.childNodes.length===0)return;
+   [...node.childNodes].forEach(walk);
+   blocks.push({type:"text",text:"\n"});
+   return;
+  }
+  [...node.childNodes].forEach(walk);
+ }
+ [...editor.childNodes].forEach(walk);
+ return blocks;
+}
+
+async function saveFaq(event){
+ event.preventDefault();
+
+ const category=$("category").value;
+ const question=$("question").value.trim();
+ const answer=$("answer").value.trim();
+ const details=$("details").value.trim();
+
+ if(!category||!question||!answer){
+  toast("Please complete required fields.");
+  return;
+ }
+
+ const content_json=getBlocks();
+
+ const payload={
+  category,question,answer,details,
+  sort_order:editingId
+   ?(faqs.find(f=>Number(f.id)===editingId)?.sort_order||0)
+   :faqs.length+1,
+  is_published:1,
+  content_json
+ };
+
+ $("saveBtn").disabled=true;
+ $("saveBtn").textContent="Saving...";
+
+ try{
+  if(editingId){
+   await api(API+"/"+editingId,{
+    method:"PUT",
+    body:JSON.stringify(payload)
+   });
+   toast("FAQ updated successfully.");
+  }else{
+   await api(API,{
+    method:"POST",
+    body:JSON.stringify(payload)
+   });
+   toast("FAQ created successfully.");
+  }
+
+  closeModal();
+  await loadFaqs();
+
+ }catch(e){
+  toast(e.message);
+ }finally{
+  $("saveBtn").disabled=false;
+  $("saveBtn").textContent="Save FAQ";
+ }
+}
+
+async function deleteFaq(id){
+ const f=faqs.find(x=>Number(x.id)===id);
+ if(!f)return;
+ if(!confirm("Delete this FAQ permanently?"))return;
+
+ try{
+  await api(API+"/"+id,{method:"DELETE"});
+  toast("FAQ deleted.");
+  await loadFaqs();
+ }catch(e){
+  toast(e.message);
+ }
+}
+
+$("addBtn").onclick=openNew;
+$("closeBtn").onclick=closeModal;
+$("cancelBtn").onclick=closeModal;
+$("faqForm").onsubmit=saveFaq;
+$("search").oninput=render;
+
+$("imageBtn").onclick=()=>$("imageInput").click();
+$("imageInput").onchange=e=>{
+ [...e.target.files].forEach(addImage);
+ e.target.value="";
+};
+
+$("smallBtn").onclick=()=>resizeSelected("small");
+$("mediumBtn").onclick=()=>resizeSelected("medium");
+$("largeBtn").onclick=()=>resizeSelected("large");
+
+$("removeImageBtn").onclick=()=>{
+ if(!selectedImage){toast("Select a photo first.");return}
+ selectedImage.remove();
+ selectedImage=null;
+ updatePreview();
+};
+
+editor.addEventListener("click",e=>{
+ if(e.target.tagName==="IMG")selectImage(e.target);
+});
+
+editor.addEventListener("input",updatePreview);
+
+editor.addEventListener("dragover",e=>e.preventDefault());
+editor.addEventListener("drop",e=>{
+ e.preventDefault();
+ [...(e.dataTransfer.files||[])].forEach(addImage);
+});
+
+editor.addEventListener("paste",e=>{
+ const items=[...(e.clipboardData?.items||[])];
+ const images=items.filter(x=>x.type.startsWith("image/"));
+ if(images.length){
+  e.preventDefault();
+  images.forEach(item=>addImage(item.getAsFile()));
+ }
+});
+
+loadFaqs();
+</script>
 </body>
 </html>
